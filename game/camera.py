@@ -26,3 +26,9 @@ class Camera:
         self.fi += angle
         self.camera.rotate(angle, axis=scene.up)
         self.set_aim_camera()
+
+    def set_observing_camera(self):
+        self.c.clear()
+        scene.center = vec(0, 0, 0)
+        self.camera.pos = vec(0, 1250, -1000)
+        self.camera.axis = -self.camera.pos
