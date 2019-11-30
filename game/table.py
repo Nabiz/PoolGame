@@ -23,8 +23,8 @@ class Table:
                         size=vec(WALL_WIDTH, WALL_WIDTH, WIDTH+2*WALL_WIDTH), color=brown)
 
     def create_pockets(self):
-        pocket1 = cylinder(pos=vec(0, -WALL_WIDTH/2.1, -WIDTH/2), axis=vec(0, WALL_WIDTH, 0), radius=HOLE_RADIUS, color=color.black)
-        pocket2 = cylinder(pos=vec(0, -WALL_WIDTH/2.1, WIDTH/2), axis=vec(0, WALL_WIDTH, 0), radius=HOLE_RADIUS, color=color.black)
+        pocket1 = cylinder(pos=vec(0, -WALL_WIDTH/2.1, -WIDTH/1.95), axis=vec(0, WALL_WIDTH, 0), radius=HOLE_RADIUS, color=color.black)
+        pocket2 = cylinder(pos=vec(0, -WALL_WIDTH/2.1, WIDTH/1.95), axis=vec(0, WALL_WIDTH, 0), radius=HOLE_RADIUS, color=color.black)
         pocket3 = cylinder(pos=vec(-LENGTH/2, -WALL_WIDTH/2.1, -WIDTH/2), axis=vec(0, WALL_WIDTH, 0), radius=HOLE_RADIUS,
                            color=color.black)
         pocket4 = cylinder(pos=vec(LENGTH/2, -WALL_WIDTH/2.1, -WIDTH/2), axis=vec(0, WALL_WIDTH, 0), radius=HOLE_RADIUS,

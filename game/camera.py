@@ -11,7 +11,7 @@ class Camera:
         self.c = curve(color=color.red, radius=5)
         self.set_aim_camera()
 
-    def aim_camera_position(self, fi, r=200):
+    def aim_camera_position(self, fi, r=300):
         x = r * cos(fi)
         z = r * sin(fi)
         return vec(x, 50, z)

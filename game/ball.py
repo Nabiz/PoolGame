@@ -29,7 +29,7 @@ class Ball:
         self.ball.pos = self.ball.pos + dt * self.velocity
         self.ball.rotate(angle=mag(self.velocity)*0.0002*pi, axis=self.rotation_axis)
         self.set_velocity(self.velocity - self.velocity * 0.005)
-        if mag(self.velocity) < 0.2:
+        if mag(self.velocity) < 1:
             self.set_velocity(vec(0, 0, 0))
 
     def table_collision(self, table):
@@ -40,13 +40,14 @@ class Ball:
                 or table.board.width/2 < self.ball.pos.z + self.ball.radius:
             self.set_velocity(vec(self.velocity.x, 0, -self.velocity.z))
 
-    def pocket_collision(self, pockets):
+    def pocket_collision(self, pockets, info):
         for pocket in pockets:
             if mag(self.ball.pos - pocket.pos) < HOLE_RADIUS+RADIUS:
                 self.set_velocity(vec(0, 0, 0))
                 self.ball.visible = False
+                info.score(self)
 
-    def oter_balls_collision(self, rack):
+    def other_balls_collision(self, rack):
         for another_ball in rack:
             if another_ball.ball.visible:
                 pos_a = self.ball.pos
