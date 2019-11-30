@@ -1,4 +1,4 @@
-from vpython import sphere, vec, mag, dot
+from vpython import sphere, vec, mag, dot, cross, pi
 from math import sqrt
 
 RADIUS = 23.5
@@ -7,10 +7,12 @@ BALL_ORDER = [[1], [10, 3], [6, 8, 13], [9, 4, 15, 2], [14, 11, 5, 12, 7]]
 RACK_POS = 400
 HOLE_RADIUS = 37
 
+
 class Ball:
     def __init__(self, number, pos=vec(0, 0, 0)):
         self.number = number
         self.velocity = vec(0, 0, 0)
+        self.rotation_axis = vec(0, 0, 0)
         if number in range(1, 16):
             self.ball = sphere(radius=RADIUS, pos=pos, texture={'file': 'textures/ball{}.jpg'.format(self.number)})
         else:
@@ -18,12 +20,17 @@ class Ball:
 
     def set_velocity(self, velocity):
         self.velocity = velocity
+        self.calculate_rotation_axis()
+
+    def calculate_rotation_axis(self):
+        self.rotation_axis = cross(vec(0, 1, 0), self.velocity)
 
     def move(self, dt):
         self.ball.pos = self.ball.pos + dt * self.velocity
-        self.velocity -= self.velocity * 0.005
-        if mag(self.velocity) < 0.2:
-            self.velocity = vec(0, 0, 0)
+        self.ball.rotate(angle=mag(self.velocity)*0.0002*pi, axis=self.rotation_axis)
+        self.set_velocity(self.velocity - self.velocity * 0.005)
+        if mag(self.velocity) < 1:
+            self.set_velocity(vec(0, 0, 0))
 
     def table_collision(self, table):
         if self.ball.pos.x - self.ball.radius < -table.board.length/2 \
@@ -33,13 +40,14 @@ class Ball:
                 or table.board.width/2 < self.ball.pos.z + self.ball.radius:
             self.set_velocity(vec(self.velocity.x, 0, -self.velocity.z))
 
-    def pocket_collision(self, pockets):
+    def pocket_collision(self, pockets, info):
         for pocket in pockets:
             if mag(self.ball.pos - pocket.pos) < HOLE_RADIUS+RADIUS:
-                self.velocity = vec(0, 0, 0)
+                self.set_velocity(vec(0, 0, 0))
                 self.ball.visible = False
+                info.score(self)
 
-    def oter_balls_collision(self, rack):
+    def other_balls_collision(self, rack):
         for another_ball in rack:
             if another_ball.ball.visible:
                 pos_a = self.ball.pos
@@ -62,8 +70,10 @@ class Ball:
                         vel_b += tmp
                         pos_a += vel_a * dtprim
                         pos_b += vel_b * dtprim
-                        self.ball.pos, self.velocity = pos_a, vel_a
-                        another_ball.pos, another_ball.velocity = pos_b, vel_b
+                        self.ball.pos = pos_a
+                        self.set_velocity(vel_a)
+                        another_ball.pos = pos_b
+                        another_ball.set_velocity(vel_b)
 
 
 def create_rack():
