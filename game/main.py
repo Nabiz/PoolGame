@@ -37,29 +37,7 @@ while True:
         if ball.ball.visible:
             ball.pocket_collision(table.pockets)
             ball.table_collision(table)
-            for another_ball in rack:
-                if another_ball.ball.visible:
-                    pos_a = ball.ball.pos
-                    pos_b = another_ball.ball.pos
-                    vel_a = ball.velocity
-                    vel_b = another_ball.velocity
-                    radius = ball.ball.radius
-                    if ball != another_ball and mag(pos_a-pos_b)<2*radius:
-                        a = mag(vel_a-vel_b) ** 2
-                        b = dot(-2*(pos_a-pos_b), (vel_a-vel_b))
-                        c = mag(pos_a-pos_b) ** 2-(2*radius)**2
-                        delta = b ** 2 - 4*a*c
-                        if a != 0 and delta > 0:
-                            dtprim = (-b + sqrt(delta)) / (2*a)
-                            pos_a = pos_a - vel_a * dtprim
-                            pos_b = pos_b - vel_b * dtprim
-                            tmp = (dot(vel_a-vel_b, (pos_a-pos_b)/mag(pos_a-pos_b)))*((pos_a-pos_b)/mag(pos_a-pos_b))
-                            vel_a -= tmp
-                            vel_b += tmp
-                            pos_a += vel_a * dtprim
-                            pos_b += vel_b * dtprim
-                            ball.ball.pos, ball.velocity = pos_a, vel_a
-                            another_ball.pos, another_ball.velocity = pos_b, vel_b
+            ball.oter_balls_collision(rack)
             ball.move(dt)
     for ball in rack:
         if ball.velocity != vec(0, 0, 0):
