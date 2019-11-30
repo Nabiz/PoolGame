@@ -27,7 +27,7 @@ class Ball:
 
     def move(self, dt):
         self.ball.pos = self.ball.pos + dt * self.velocity
-        self.ball.rotate(angle=mag(self.velocity)*0.001*pi, axis=self.rotation_axis)
+        self.ball.rotate(angle=mag(self.velocity)*0.0002*pi, axis=self.rotation_axis)
         self.set_velocity(self.velocity - self.velocity * 0.005)
         if mag(self.velocity) < 0.2:
             self.set_velocity(vec(0, 0, 0))
