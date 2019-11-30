@@ -1,4 +1,4 @@
-from vpython import sphere, vec, mag, dot
+from vpython import sphere, vec, mag, dot, cross, pi
 from math import sqrt
 
 RADIUS = 23.5
@@ -20,9 +20,14 @@ class Ball:
 
     def set_velocity(self, velocity):
         self.velocity = velocity
+        self.calculate_rotation_axis()
+
+    def calculate_rotation_axis(self):
+        self.rotation_axis = cross(vec(0, 1, 0), self.velocity)
 
     def move(self, dt):
         self.ball.pos = self.ball.pos + dt * self.velocity
+        self.ball.rotate(angle=mag(self.velocity)*0.001*pi, axis=self.rotation_axis)
         self.set_velocity(self.velocity - self.velocity * 0.005)
         if mag(self.velocity) < 0.2:
             self.set_velocity(vec(0, 0, 0))

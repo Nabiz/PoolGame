@@ -14,7 +14,7 @@ rack.append(cue_ball)
 
 mode = "aim"
 # Game loop
-power = 1
+power = 0.2
 dt = 0.1
 while True:
     rate(100)
